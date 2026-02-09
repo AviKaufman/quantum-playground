@@ -23,13 +23,17 @@ function applyTheme(theme: ThemeId) {
 }
 
 export function ThemePicker() {
-  const [theme, setTheme] = useState<ThemeId>(() => {
-    if (typeof window === 'undefined') return 'noir'
+  // Keep server + initial client render consistent to avoid hydration mismatches.
+  const [theme, setTheme] = useState<ThemeId>('noir')
+  const current = useMemo(() => themes.find((t) => t.id === theme) || themes[0], [theme])
+
+  useEffect(() => {
     const stored = window.localStorage.getItem(STORAGE_KEY)
     const found = themes.some((t) => t.id === stored)
-    return (found ? stored : 'noir') as ThemeId
-  })
-  const current = useMemo(() => themes.find((t) => t.id === theme) || themes[0], [theme])
+    const next = (found ? stored : 'noir') as ThemeId
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(next)
+  }, [])
 
   useEffect(() => {
     applyTheme(theme)

@@ -21,14 +21,18 @@ function applyDesign(design: DesignId) {
 }
 
 export function DesignPicker() {
-  const [design, setDesign] = useState<DesignId>(() => {
-    if (typeof window === 'undefined') return 'studio'
-    const stored = window.localStorage.getItem(STORAGE_KEY)
-    const found = designs.some((d) => d.id === stored)
-    return (found ? stored : 'studio') as DesignId
-  })
+  // Keep server + initial client render consistent to avoid hydration mismatches.
+  const [design, setDesign] = useState<DesignId>('studio')
 
   const current = useMemo(() => designs.find((d) => d.id === design) || designs[0], [design])
+
+  useEffect(() => {
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    const found = designs.some((d) => d.id === stored)
+    const next = (found ? stored : 'studio') as DesignId
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setDesign(next)
+  }, [])
 
   useEffect(() => {
     applyDesign(design)
@@ -60,4 +64,3 @@ export function DesignPicker() {
     </div>
   )
 }
-
