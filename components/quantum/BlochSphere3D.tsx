@@ -30,7 +30,9 @@ function project(p: Vec3, size: number, camZ: number) {
   const x = p.x * k
   const y = p.y * k
   const half = size / 2
-  return { x: half + x * half, y: half - y * half, z: p.z }
+  // Scale down the projection so axes + labels stay inside the canvas.
+  const scale = 0.82
+  return { x: half + x * half * scale, y: half - y * half * scale, z: p.z }
 }
 
 export function BlochSphere3D({ vector, label = 'Bloch sphere (3D)' }: BlochSphere3DProps) {
@@ -80,10 +82,10 @@ export function BlochSphere3D({ vector, label = 'Bloch sphere (3D)' }: BlochSphe
     const vec = { x, y, z }
 
     // Sphere outline.
-    ctx.strokeStyle = border
-    ctx.lineWidth = 2
+    ctx.strokeStyle = borderRaw ? `hsl(${borderRaw} / 0.70)` : border
+    ctx.lineWidth = 2.25
     ctx.beginPath()
-    ctx.arc(size / 2, size / 2, (size * 0.42), 0, Math.PI * 2)
+    ctx.arc(size / 2, size / 2, size * 0.42 * 0.82, 0, Math.PI * 2)
     ctx.stroke()
 
     // Lat/long grid with depth cueing.
@@ -130,23 +132,57 @@ export function BlochSphere3D({ vector, label = 'Bloch sphere (3D)' }: BlochSphe
     }
 
     // Axes.
-    const axis = (dir: Vec3, labelText: string) => {
-      const a = applyView({ x: 0, y: 0, z: 0 })
-      const b = applyView(dir)
-      ctx.strokeStyle = border
+    const drawAxis = (dir: Vec3, labelText: string, color: string) => {
+      const o = applyView({ x: 0, y: 0, z: 0 })
+      const p = applyView(dir)
+      const n = applyView({ x: -dir.x, y: -dir.y, z: -dir.z })
+
+      // Negative axis (faint dashed).
+      ctx.save()
+      ctx.strokeStyle = color.replace('0.95', '0.28')
       ctx.lineWidth = 1.5
+      ctx.setLineDash([4, 4])
       ctx.beginPath()
-      ctx.moveTo(a.x, a.y)
-      ctx.lineTo(b.x, b.y)
+      ctx.moveTo(o.x, o.y)
+      ctx.lineTo(n.x, n.y)
+      ctx.stroke()
+      ctx.restore()
+
+      // Positive axis (bold).
+      ctx.strokeStyle = color
+      ctx.lineWidth = 2.75
+      ctx.beginPath()
+      ctx.moveTo(o.x, o.y)
+      ctx.lineTo(p.x, p.y)
       ctx.stroke()
 
-      ctx.fillStyle = text
+      // End cap + label with a subtle outline for contrast.
+      ctx.fillStyle = color
+      ctx.beginPath()
+      ctx.arc(p.x, p.y, 3.2, 0, Math.PI * 2)
+      ctx.fill()
+
       ctx.font = '12px ui-sans-serif, system-ui'
-      ctx.fillText(labelText, b.x + 6, b.y + 4)
+      ctx.lineWidth = 3
+      ctx.strokeStyle = 'rgba(0,0,0,0.55)'
+      ctx.strokeText(labelText, p.x + 6, p.y + 4)
+      ctx.fillStyle = 'rgba(255,255,255,0.88)'
+      ctx.fillText(labelText, p.x + 6, p.y + 4)
     }
-    axis({ x: 1, y: 0, z: 0 }, '+x')
-    axis({ x: 0, y: 1, z: 0 }, '+y')
-    axis({ x: 0, y: 0, z: 1 }, '+z')
+
+    // Color-coded axes for visibility on dark backgrounds.
+    drawAxis({ x: 1, y: 0, z: 0 }, '+x', 'rgba(255, 110, 130, 0.95)')
+    drawAxis({ x: 0, y: 1, z: 0 }, '+y', 'rgba(120, 255, 180, 0.95)')
+    drawAxis({ x: 0, y: 0, z: 1 }, '+z', 'rgba(120, 170, 255, 0.95)')
+
+    // Origin marker.
+    {
+      const o = applyView({ x: 0, y: 0, z: 0 })
+      ctx.fillStyle = borderRaw ? `hsl(${borderRaw} / 0.90)` : 'rgba(255,255,255,0.65)'
+      ctx.beginPath()
+      ctx.arc(o.x, o.y, 2.2, 0, Math.PI * 2)
+      ctx.fill()
+    }
 
     // Bloch vector.
     {

@@ -30,9 +30,17 @@ export default function RootLayout({
                   circuits, simulation, share links
                 </span>
               </div>
-              <span className="text-xs text-muted-foreground">
-                Theme: Midnight Prism
-              </span>
+              <nav className="flex items-center gap-4">
+                <a
+                  href="https://avi-kaufman.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Back to avi-kaufman.com"
+                >
+                  avi-kaufman.com
+                </a>
+              </nav>
             </div>
           </header>
           <main>{children}</main>
