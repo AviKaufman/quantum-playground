@@ -1,7 +1,5 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import { ThemePicker } from '@/components/ui/ThemePicker'
-import { DesignPicker } from '@/components/ui/DesignPicker'
 
 export const metadata: Metadata = {
   title: 'Quantum Playground',
@@ -19,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" data-theme="noir" data-ui="studio">
+    <html lang="en" className="dark">
       <body className="font-sans antialiased">
         <div className="min-h-screen">
           <header className="sticky top-0 z-50 border-b border-border/70 bg-background/55 backdrop-blur">
@@ -32,10 +30,9 @@ export default function RootLayout({
                   circuits, simulation, share links
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <DesignPicker />
-                <ThemePicker />
-              </div>
+              <span className="text-xs text-muted-foreground">
+                Theme: Midnight Prism
+              </span>
             </div>
           </header>
           <main>{children}</main>

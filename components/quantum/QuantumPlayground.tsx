@@ -17,7 +17,7 @@ import {
   type Circuit,
   type GateOp,
 } from '@/lib/quantum/simulator'
-import { BlochSphere2D } from '@/components/quantum/BlochSphere2D'
+import { BlochSphere3D } from '@/components/quantum/BlochSphere3D'
 
 type Tool =
   | 'H'
@@ -674,7 +674,7 @@ export function QuantumPlayground() {
                   ))}
                 </select>
               </label>
-              <BlochSphere2D vector={bloch} />
+              <BlochSphere3D vector={bloch} />
             </div>
           )}
 
