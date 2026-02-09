@@ -410,7 +410,7 @@ export function QuantumPlayground() {
 
   return (
     <div className="mt-10">
-      <div className="rounded-lg border border-border bg-muted/10 p-4">
+      <div className="rounded-2xl border border-border glass ring-soft p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
             <label className="inline-flex items-center gap-2 text-sm text-muted-foreground">
@@ -432,7 +432,7 @@ export function QuantumPlayground() {
               <button
                 type="button"
                 onClick={addQubit}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-muted"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-background/80 px-3 py-2 text-sm hover:bg-muted/80 transition-colors"
                 disabled={circuit.nQubits >= MAX_QUBITS}
                 title="Add qubit"
               >
@@ -442,7 +442,7 @@ export function QuantumPlayground() {
               <button
                 type="button"
                 onClick={removeQubit}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-background/80 px-3 py-2 text-sm hover:bg-muted/80 disabled:opacity-50 transition-colors"
                 disabled={circuit.nQubits <= 1}
                 title="Remove qubit"
               >
@@ -452,7 +452,7 @@ export function QuantumPlayground() {
               <button
                 type="button"
                 onClick={addStep}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-background/80 px-3 py-2 text-sm hover:bg-muted/80 disabled:opacity-50 transition-colors"
                 disabled={circuit.steps.length >= MAX_STEPS}
                 title="Add step"
               >
@@ -462,7 +462,7 @@ export function QuantumPlayground() {
               <button
                 type="button"
                 onClick={removeStep}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-muted disabled:opacity-50"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-background/80 px-3 py-2 text-sm hover:bg-muted/80 disabled:opacity-50 transition-colors"
                 disabled={circuit.steps.length <= 1}
                 title="Remove step"
               >
@@ -472,7 +472,7 @@ export function QuantumPlayground() {
               <button
                 type="button"
                 onClick={clearCircuit}
-                className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-3 py-2 text-sm hover:bg-muted"
+                className="inline-flex items-center gap-2 rounded-md border border-border bg-background/80 px-3 py-2 text-sm hover:bg-muted/80 transition-colors"
                 title="Clear circuit"
               >
                 <RotateCcw className="h-4 w-4" />
@@ -486,7 +486,7 @@ export function QuantumPlayground() {
               Shots
               <input
                 type="number"
-                className="w-28 rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+                className="w-28 rounded-md border border-border bg-background/80 px-3 py-2 text-sm text-foreground"
                 value={shots}
                 min={0}
                 max={200000}
@@ -497,7 +497,7 @@ export function QuantumPlayground() {
               Seed
               <input
                 type="number"
-                className="w-32 rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+                className="w-32 rounded-md border border-border bg-background/80 px-3 py-2 text-sm text-foreground"
                 value={seed}
                 min={0}
                 max={0xffffffff}
@@ -507,7 +507,7 @@ export function QuantumPlayground() {
             <button
               type="button"
               onClick={copyShareLink}
-              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90"
+              className="inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 shadow-sm shadow-black/10"
               title="Copy share link"
             >
               <Copy className="h-4 w-4" />
@@ -526,7 +526,7 @@ export function QuantumPlayground() {
 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div>
-          <div className="rounded-lg border border-border bg-card p-4">
+          <div className="rounded-2xl border border-border glass ring-soft p-5">
             <p className="text-sm font-medium">Editor</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Select a tool, then click cells. For two-qubit tools, click control then target (same column).
@@ -552,8 +552,8 @@ export function QuantumPlayground() {
                   onClick={() => selectTool(id)}
                   className={`rounded-md border px-3 py-2 text-sm transition-colors ${
                     tool === id
-                      ? 'border-primary bg-primary/10 text-foreground'
-                      : 'border-border bg-background text-muted-foreground hover:bg-muted'
+                      ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
+                      : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
                   }`}
                 >
                   {label}
@@ -564,8 +564,8 @@ export function QuantumPlayground() {
                 onClick={() => selectTool('ERASE')}
                 className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
                   tool === 'ERASE'
-                    ? 'border-primary bg-primary/10 text-foreground'
-                    : 'border-border bg-background text-muted-foreground hover:bg-muted'
+                    ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
+                    : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
                 }`}
                 title="Erase"
               >
@@ -613,15 +613,15 @@ export function QuantumPlayground() {
 
                       const style = token
                         ? token.variant === 'control'
-                          ? 'border-border bg-background text-foreground'
+                          ? 'border-border bg-background/80 text-foreground'
                           : token.variant === 'target'
-                            ? 'border-border bg-background text-foreground'
+                            ? 'border-border bg-background/80 text-foreground'
                             : token.variant === 'swap'
-                              ? 'border-border bg-background text-foreground'
+                              ? 'border-border bg-background/80 text-foreground'
                               : token.variant === 'measure'
-                                ? 'border-border bg-background text-foreground'
-                                : 'border-border bg-secondary text-secondary-foreground'
-                        : 'border-border bg-background text-muted-foreground hover:bg-muted'
+                                ? 'border-border bg-background/80 text-foreground'
+                                : 'border-border bg-secondary/80 text-secondary-foreground'
+                        : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
 
                       const ring = isPending ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : ''
 
@@ -645,7 +645,7 @@ export function QuantumPlayground() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-lg border border-border bg-card p-4">
+          <div className="rounded-2xl border border-border glass ring-soft p-5">
             <p className="text-sm font-medium">Results</p>
             {sim.error ? (
               <p className="mt-2 text-sm text-red-500">
@@ -678,7 +678,7 @@ export function QuantumPlayground() {
             </div>
           )}
 
-          <div className="rounded-lg border border-border bg-card p-4">
+          <div className="rounded-2xl border border-border glass ring-soft p-5">
             <p className="text-sm font-medium">Top amplitudes</p>
             <p className="mt-1 text-xs text-muted-foreground">
               Basis states are shown as bitstrings with q0 on the left.
@@ -716,7 +716,7 @@ export function QuantumPlayground() {
             </div>
           </div>
 
-          <div className="rounded-lg border border-border bg-card p-4">
+          <div className="rounded-2xl border border-border glass ring-soft p-5">
             <p className="text-sm font-medium">Measurement histogram (seeded)</p>
             <p className="mt-1 text-xs text-muted-foreground">
               {shots} shots using seed {clampInt(seed, 0, 0xffffffff)}.

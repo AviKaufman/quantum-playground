@@ -25,7 +25,7 @@ export function BlochSphere2D({ vector, label = 'Bloch sphere (x-z projection)' 
   const py = cy - z * radius
 
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
+    <div className="rounded-2xl border border-border glass ring-soft p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-sm font-medium">{label}</p>
@@ -63,7 +63,7 @@ export function BlochSphere2D({ vector, label = 'Bloch sphere (x-z projection)' 
             cy={cy}
             r={radius}
             fill="hsl(var(--muted))"
-            fillOpacity={0.25}
+            fillOpacity={0.22}
             stroke="hsl(var(--border))"
             strokeWidth={2}
           />
@@ -120,4 +120,3 @@ export function BlochSphere2D({ vector, label = 'Bloch sphere (x-z projection)' 
     </div>
   )
 }
-

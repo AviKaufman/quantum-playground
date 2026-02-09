@@ -4,36 +4,45 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --border: 214.3 31.8% 91.4%;
+    /* A calmer, “lab notebook” palette with a touch of aurora. */
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --border: 214 25% 88%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
+    --card-foreground: 222 47% 11%;
+    --primary: 198 88% 42%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --secondary: 210 35% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 35% 95%;
+    --muted-foreground: 215 16% 44%;
+    --accent: 240 100% 97%;
+    --accent-foreground: 222 47% 11%;
     --radius: 0.5rem;
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
+    --background: 222 55% 6%;
     --foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --card: 222.2 84% 4.9%;
+    --border: 220 25% 18%;
+    --card: 222 55% 8%;
     --card-foreground: 210 40% 98%;
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
+    --primary: 190 90% 55%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 220 25% 14%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
+    --muted: 220 25% 14%;
+    --muted-foreground: 215 20% 70%;
+    --accent: 245 30% 16%;
     --accent-foreground: 210 40% 98%;
+  }
+
+  html {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
   }
 }
 
@@ -43,11 +52,50 @@
     color: hsl(var(--foreground));
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+
+  /* Non-flat backdrop: a subtle “aurora” + faint grid, without images. */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+      radial-gradient(1200px 700px at 18% 10%, hsl(var(--primary) / 0.18), transparent 60%),
+      radial-gradient(900px 600px at 78% 18%, hsl(280 90% 65% / 0.10), transparent 55%),
+      radial-gradient(900px 650px at 60% 92%, hsl(160 80% 45% / 0.10), transparent 55%),
+      linear-gradient(to bottom, transparent, hsl(var(--background)));
+  }
+
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.35) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(700px 500px at 50% 15%, black 40%, transparent 70%);
+  }
 }
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+
+  .glass {
+    background: hsl(var(--card) / 0.72);
+    backdrop-filter: blur(10px);
+  }
+
+  .ring-soft {
+    box-shadow:
+      0 0 0 1px hsl(var(--border) / 0.8),
+      0 16px 40px -24px hsl(0 0% 0% / 0.35);
   }
 }
 
