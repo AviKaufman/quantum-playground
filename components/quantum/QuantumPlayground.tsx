@@ -563,46 +563,76 @@ export function QuantumPlayground() {
 
             <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]">
               <div>
-                <div className="flex flex-wrap gap-2">
-                  {(
-                    [
-                      ['H', 'H'],
-                      ['X', 'X'],
-                      ['Y', 'Y'],
-                      ['Z', 'Z'],
-                      ['S', 'S'],
-                      ['T', 'T'],
-                      ['CNOT', 'CNOT'],
-                      ['CZ', 'CZ'],
-                      ['SWAP', 'SWAP'],
-                    ] as const
-                  ).map(([id, label]) => (
+                <div className="rounded-xl border border-border/70 bg-background/25 p-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                      Gate palette
+                    </p>
+                    {pending && (
+                      <span className="text-xs text-muted-foreground">
+                        pending {pending.tool}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-3">
+                    <p className="text-xs text-muted-foreground">Single-qubit</p>
+                    <div className="mt-2 grid grid-cols-6 gap-1 rounded-xl border border-border/60 bg-background/10 p-1">
+                      {(['H', 'X', 'Y', 'Z', 'S', 'T'] as const).map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => selectTool(id)}
+                          className={`h-10 rounded-lg border text-sm font-medium transition-colors ${
+                            tool === id
+                              ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
+                              : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
+                          }`}
+                          aria-pressed={tool === id}
+                        >
+                          {id}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4">
+                    <p className="text-xs text-muted-foreground">Two-qubit</p>
+                    <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl border border-border/60 bg-background/10 p-1">
+                      {(['CNOT', 'CZ', 'SWAP'] as const).map((id) => (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => selectTool(id)}
+                          className={`h-10 rounded-lg border text-sm font-medium transition-colors ${
+                            tool === id
+                              ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
+                              : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
+                          }`}
+                          aria-pressed={tool === id}
+                        >
+                          {id}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 flex items-center justify-between gap-3">
                     <button
-                      key={id}
                       type="button"
-                      onClick={() => selectTool(id)}
-                      className={`rounded-md border px-3 py-2 text-sm transition-colors ${
-                        tool === id
-                          ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
-                          : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
+                      onClick={() => selectTool('ERASE')}
+                      className={`inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors ${
+                        tool === 'ERASE'
+                          ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
+                          : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
                       }`}
+                      aria-pressed={tool === 'ERASE'}
+                      title="Erase"
                     >
-                      {label}
+                      <Eraser className="h-4 w-4" />
+                      Erase
                     </button>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => selectTool('ERASE')}
-                    className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
-                      tool === 'ERASE'
-                        ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
-                        : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
-                    }`}
-                    title="Erase"
-                  >
-                    <Eraser className="h-4 w-4" />
-                    Erase
-                  </button>
+                  </div>
                 </div>
 
                 {pending && (

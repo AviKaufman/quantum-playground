@@ -15,6 +15,24 @@ export type OperatorId = 'H' | 'X' | 'Y' | 'Z' | 'S' | 'T' | 'CNOT' | 'CZ' | 'SW
 const SQRT1_2 = '1/√2'
 const EIPIO4 = 'e^{iπ/4}'
 
+function formatMatrix(cells: string[][]) {
+  const cols = cells[0]?.length ?? 0
+  const widths = new Array<number>(cols).fill(0)
+  for (const row of cells) {
+    for (let c = 0; c < cols; c += 1) {
+      widths[c] = Math.max(widths[c], (row[c] ?? '').length)
+    }
+  }
+
+  const lines: string[] = []
+  for (let r = 0; r < cells.length; r += 1) {
+    const row = cells[r]
+    const padded = row.map((v, c) => (v ?? '').padStart(widths[c], ' '))
+    lines.push(`[ ${padded.join('  ')} ]`)
+  }
+  return lines.join('\n')
+}
+
 const matrixForOperator = (op: OperatorId): MatrixModel | null => {
   switch (op) {
     case 'H':
@@ -133,59 +151,46 @@ export function OperatorMatrix({
   const model = matrixForOperator(operator)
 
   return (
-    <div className={embedded ? 'rounded-xl border border-border/70 bg-background/25 p-4' : 'rounded-2xl border border-border glass ring-soft p-5'}>
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-sm font-medium">Operator matrix</p>
-          <p className="mt-1 text-xs text-muted-foreground">
-            {operator === 'ERASE' ? 'Erase clears gates from a cell.' : 'Selected tool shown in canonical form.'}
-          </p>
-          {helper && (
-            <p className="mt-1 text-xs text-muted-foreground">
-              {helper}
-            </p>
-          )}
-        </div>
-        <span className="rounded-full border border-border bg-background/60 px-3 py-1 text-xs text-muted-foreground">
-          {operator}
-        </span>
-      </div>
+    <div
+      className={
+        embedded
+          ? 'rounded-xl border border-border/70 bg-background/25 p-4'
+          : 'rounded-2xl border border-border glass ring-soft p-5'
+      }
+    >
+      <p className="text-sm font-medium">Operator</p>
+      <p className="mt-1 text-xs text-muted-foreground">
+        Selected: <span className="font-medium text-foreground">{operator}</span>
+      </p>
+      {helper && (
+        <p className="mt-1 text-xs text-muted-foreground">
+          {helper}
+        </p>
+      )}
 
       {model ? (
         <div className="mt-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <p className="text-sm font-medium">{model.title}</p>
-            {model.subtitle && (
-              <p className="text-xs text-muted-foreground">{model.subtitle}</p>
-            )}
-          </div>
-
+          <p className="text-sm font-medium">{model.title}</p>
+          {model.subtitle && (
+            <p className="mt-1 text-xs text-muted-foreground">{model.subtitle}</p>
+          )}
           {model.basis && (
-            <p className="mt-2 text-xs text-muted-foreground">
-              Basis order: {model.basis.join(', ')}
+            <p className="mt-1 text-xs text-muted-foreground">
+              Basis: {model.basis.join(', ')}
             </p>
           )}
 
-          <div
-            className={`mt-3 grid gap-1 ${model.dim === 2 ? 'grid-cols-2' : 'grid-cols-4'}`}
+          <pre
+            className="mt-3 overflow-x-auto rounded-xl border border-border/70 bg-background/20 px-4 py-3 font-mono text-[12px] leading-5 text-foreground/90"
             aria-label="Operator matrix"
           >
-            {model.cells.flatMap((row, r) =>
-              row.map((cell, c) => (
-                <div
-                  key={`${r}-${c}`}
-                  className="rounded-lg border border-border/70 bg-background/25 px-2 py-1 text-center font-mono text-[11px] text-foreground/90"
-                >
-                  {cell}
-                </div>
-              )),
-            )}
-          </div>
+{`${operator} =\n${formatMatrix(model.cells)}`}
+          </pre>
         </div>
       ) : (
-        <div className="mt-4 rounded-xl border border-border/70 bg-background/25 px-4 py-3">
+        <div className="mt-4 rounded-xl border border-border/70 bg-background/20 px-4 py-3">
           <p className="text-sm text-muted-foreground">
-            Tip: use <span className="font-medium text-foreground">Erase</span> to remove a gate from a cell without changing other qubits in that step.
+            Erase removes gates from a cell.
           </p>
         </div>
       )}
