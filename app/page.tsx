@@ -1,6 +1,25 @@
-import { QuantumPlayground } from '@/components/quantum/QuantumPlayground'
+'use client'
+
+import { useEffect, useState } from 'react'
+import { QuantumPlaygroundByDesign } from '@/components/quantum/QuantumPlaygroundLayouts'
+import type { DesignId } from '@/components/ui/DesignPicker'
 
 export default function HomePage() {
+  const [design, setDesign] = useState<DesignId>(() => {
+    if (typeof window === 'undefined') return 'studio'
+    return (document.documentElement.dataset.ui as DesignId | undefined) || 'studio'
+  })
+
+  useEffect(() => {
+    const root = document.documentElement
+    const obs = new MutationObserver(() => {
+      const next = (root.dataset.ui as DesignId | undefined) || 'studio'
+      setDesign(next)
+    })
+    obs.observe(root, { attributes: true, attributeFilter: ['data-ui'] })
+    return () => obs.disconnect()
+  }, [])
+
   return (
     <div className="py-14 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -45,7 +64,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <QuantumPlayground />
+        <QuantumPlaygroundByDesign design={design} />
       </div>
     </div>
   )
