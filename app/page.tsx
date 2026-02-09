@@ -6,9 +6,9 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto">
         <div className="relative overflow-hidden rounded-2xl border border-border glass ring-soft">
           <div className="absolute inset-0 opacity-70">
-            <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-[hsl(var(--primary)/0.25)] blur-3xl" />
-            <div className="absolute -top-16 right-0 h-64 w-64 rounded-full bg-[hsl(280_90%_65%/0.18)] blur-3xl" />
-            <div className="absolute -bottom-28 left-1/3 h-80 w-80 rounded-full bg-[hsl(160_80%_45%/0.14)] blur-3xl" />
+            <div className="absolute -top-24 -left-24 h-72 w-72 rounded-full bg-[hsl(var(--aurora-a)/0.42)] blur-3xl" />
+            <div className="absolute -top-16 right-0 h-64 w-64 rounded-full bg-[hsl(var(--aurora-b)/0.30)] blur-3xl" />
+            <div className="absolute -bottom-28 left-1/3 h-80 w-80 rounded-full bg-[hsl(var(--aurora-c)/0.28)] blur-3xl" />
           </div>
 
           <div className="relative p-8 sm:p-10">

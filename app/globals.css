@@ -4,7 +4,7 @@
 
 @layer base {
   :root {
-    /* A calmer, “lab notebook” palette with a touch of aurora. */
+    /* Defaults (Paper Lab). Individual themes below override these tokens. */
     --background: 210 40% 98%;
     --foreground: 222 47% 11%;
     --border: 214 25% 88%;
@@ -19,15 +19,74 @@
     --accent: 240 100% 97%;
     --accent-foreground: 222 47% 11%;
     --radius: 0.5rem;
+
+    /* Backdrop controls */
+    --aurora-a: 198 88% 42%;
+    --aurora-b: 280 90% 65%;
+    --aurora-c: 160 80% 45%;
+    --aurora-opa: 0.20;
+    --aurora-opb: 0.14;
+    --aurora-opc: 0.14;
+    --grid-opa: 0.60;
+    --grid-opb: 0.35;
   }
 
-  .dark {
+  /* Theme presets (selected via <html data-theme="...">). */
+  html[data-theme="paper"] {
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --border: 214 25% 88%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --primary: 198 88% 42%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 35% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 35% 95%;
+    --muted-foreground: 215 16% 44%;
+    --accent: 240 100% 97%;
+    --accent-foreground: 222 47% 11%;
+    --aurora-a: 198 88% 42%;
+    --aurora-b: 280 90% 65%;
+    --aurora-c: 160 80% 45%;
+    --aurora-opa: 0.22;
+    --aurora-opb: 0.14;
+    --aurora-opc: 0.14;
+    --grid-opa: 0.55;
+    --grid-opb: 0.28;
+  }
+
+  html[data-theme="ice"] {
+    --background: 210 35% 97%;
+    --foreground: 223 42% 12%;
+    --border: 214 20% 86%;
+    --card: 0 0% 100%;
+    --card-foreground: 223 42% 12%;
+    --primary: 191 90% 38%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 35% 95%;
+    --secondary-foreground: 223 42% 12%;
+    --muted: 210 35% 95%;
+    --muted-foreground: 215 16% 45%;
+    --accent: 210 80% 96%;
+    --accent-foreground: 223 42% 12%;
+    --aurora-a: 191 90% 38%;
+    --aurora-b: 205 90% 55%;
+    --aurora-c: 155 70% 42%;
+    --aurora-opa: 0.26;
+    --aurora-opb: 0.18;
+    --aurora-opc: 0.12;
+    --grid-opa: 0.55;
+    --grid-opb: 0.30;
+  }
+
+  html[data-theme="noir"] {
     --background: 222 55% 6%;
     --foreground: 210 40% 98%;
     --border: 220 25% 18%;
     --card: 222 55% 8%;
     --card-foreground: 210 40% 98%;
-    --primary: 190 90% 55%;
+    --primary: 190 95% 60%;
     --primary-foreground: 222 47% 11%;
     --secondary: 220 25% 14%;
     --secondary-foreground: 210 40% 98%;
@@ -35,13 +94,72 @@
     --muted-foreground: 215 20% 70%;
     --accent: 245 30% 16%;
     --accent-foreground: 210 40% 98%;
+    --aurora-a: 190 95% 60%;
+    --aurora-b: 290 90% 70%;
+    --aurora-c: 160 75% 48%;
+    --aurora-opa: 0.26;
+    --aurora-opb: 0.18;
+    --aurora-opc: 0.16;
+    --grid-opa: 0.45;
+    --grid-opb: 0.25;
+  }
+
+  html[data-theme="prism"] {
+    --background: 232 62% 7%;
+    --foreground: 210 40% 98%;
+    --border: 230 35% 18%;
+    --card: 232 62% 9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 265 95% 70%;
+    --primary-foreground: 232 62% 10%;
+    --secondary: 230 35% 14%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 230 35% 14%;
+    --muted-foreground: 218 22% 72%;
+    --accent: 200 50% 14%;
+    --accent-foreground: 210 40% 98%;
+    --aurora-a: 265 95% 70%;
+    --aurora-b: 190 95% 60%;
+    --aurora-c: 330 90% 64%;
+    --aurora-opa: 0.28;
+    --aurora-opb: 0.18;
+    --aurora-opc: 0.16;
+    --grid-opa: 0.42;
+    --grid-opb: 0.22;
+  }
+
+  html[data-theme="terminal"] {
+    --background: 150 25% 6%;
+    --foreground: 120 35% 92%;
+    --border: 150 20% 18%;
+    --card: 150 25% 8%;
+    --card-foreground: 120 35% 92%;
+    --primary: 125 85% 55%;
+    --primary-foreground: 150 25% 8%;
+    --secondary: 150 20% 12%;
+    --secondary-foreground: 120 35% 92%;
+    --muted: 150 20% 12%;
+    --muted-foreground: 120 14% 70%;
+    --accent: 180 40% 12%;
+    --accent-foreground: 120 35% 92%;
+    --aurora-a: 125 85% 55%;
+    --aurora-b: 190 95% 58%;
+    --aurora-c: 300 80% 62%;
+    --aurora-opa: 0.22;
+    --aurora-opb: 0.14;
+    --aurora-opc: 0.14;
+    --grid-opa: 0.38;
+    --grid-opb: 0.20;
   }
 
   html {
     color-scheme: light;
   }
 
-  html.dark {
+  html.dark,
+  html[data-theme="noir"],
+  html[data-theme="prism"],
+  html[data-theme="terminal"] {
     color-scheme: dark;
   }
 }
@@ -61,9 +179,9 @@
     z-index: -1;
     pointer-events: none;
     background:
-      radial-gradient(1200px 700px at 18% 10%, hsl(var(--primary) / 0.18), transparent 60%),
-      radial-gradient(900px 600px at 78% 18%, hsl(280 90% 65% / 0.10), transparent 55%),
-      radial-gradient(900px 650px at 60% 92%, hsl(160 80% 45% / 0.10), transparent 55%),
+      radial-gradient(1200px 700px at 18% 10%, hsl(var(--aurora-a) / var(--aurora-opa)), transparent 60%),
+      radial-gradient(900px 600px at 78% 18%, hsl(var(--aurora-b) / var(--aurora-opb)), transparent 55%),
+      radial-gradient(900px 650px at 60% 92%, hsl(var(--aurora-c) / var(--aurora-opc)), transparent 55%),
       linear-gradient(to bottom, transparent, hsl(var(--background)));
   }
 
@@ -75,10 +193,10 @@
     pointer-events: none;
     opacity: 0.55;
     background-image:
-      linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
-      linear-gradient(to bottom, hsl(var(--border) / 0.35) 1px, transparent 1px);
+      linear-gradient(to right, hsl(var(--border) / var(--grid-opa)) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / var(--grid-opb)) 1px, transparent 1px);
     background-size: 64px 64px;
-    mask-image: radial-gradient(700px 500px at 50% 15%, black 40%, transparent 70%);
+    mask-image: radial-gradient(760px 520px at 50% 18%, black 38%, transparent 74%);
   }
 }
 
