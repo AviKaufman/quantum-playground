@@ -5,6 +5,7 @@ import {
   Copy,
   Eraser,
   Plus,
+  Play,
   RotateCcw,
   Trash2,
 } from 'lucide-react'
@@ -18,6 +19,7 @@ import {
   type GateOp,
 } from '@/lib/quantum/simulator'
 import { BlochSphere3D } from '@/components/quantum/BlochSphere3D'
+import { OperatorMatrix, type OperatorId } from '@/components/quantum/OperatorMatrix'
 
 type Tool =
   | 'H'
@@ -191,7 +193,9 @@ const decodeSharePayload = (encoded: string): SharePayloadV1 | null => {
 }
 
 const clampInt = (value: number, min: number, max: number) =>
-  Math.max(min, Math.min(max, Math.floor(value)))
+  Number.isFinite(value)
+    ? Math.max(min, Math.min(max, Math.floor(value)))
+    : min
 
 export function QuantumPlayground() {
   const [tool, setTool] = useState<Tool>('H')
@@ -201,6 +205,16 @@ export function QuantumPlayground() {
   const [seed, setSeed] = useState(1337)
   const [blochQubit, setBlochQubit] = useState(0)
   const [status, setStatus] = useState<string | null>(null)
+
+  const operatorHelper = useMemo(() => {
+    if (tool === 'CNOT' || tool === 'CZ' || tool === 'SWAP') {
+      if (!pending || pending.tool !== tool) return 'Two-qubit gate: click control then target (same column).'
+      if (tool === 'SWAP') return `Pending: selected q${pending.qubit}. Click a different qubit in the same column.`
+      return `Pending: selected q${pending.qubit} as control. Click a different qubit in the same column.`
+    }
+    if (tool === 'ERASE') return 'Click a cell to remove any gate touching that qubit in that step.'
+    return 'Click a cell to toggle the selected single-qubit gate.'
+  }, [tool, pending])
 
   const selectTool = (nextTool: Tool) => {
     setTool(nextTool)
@@ -408,6 +422,12 @@ export function QuantumPlayground() {
     }
   }
 
+  const runShots = () => {
+    // Deterministic re-sample: incrementing the seed produces a new histogram.
+    setSeed((s) => (clampInt(s, 0, 0xffffffff) + 1) & 0xffffffff)
+    setStatus('Resampled measurements (seed + 1).')
+  }
+
   return (
     <div className="mt-10">
       <div className="rounded-2xl border border-border glass ring-soft p-5">
@@ -490,7 +510,7 @@ export function QuantumPlayground() {
                 value={shots}
                 min={0}
                 max={200000}
-                onChange={(e) => setShots(Number(e.target.value))}
+                onChange={(e) => setShots(Number.isFinite(e.target.valueAsNumber) ? e.target.valueAsNumber : 0)}
               />
             </label>
             <label className="inline-flex items-center gap-2 text-sm text-muted-foreground">
@@ -501,9 +521,18 @@ export function QuantumPlayground() {
                 value={seed}
                 min={0}
                 max={0xffffffff}
-                onChange={(e) => setSeed(Number(e.target.value))}
+                onChange={(e) => setSeed(Number.isFinite(e.target.valueAsNumber) ? e.target.valueAsNumber : 0)}
               />
             </label>
+            <button
+              type="button"
+              onClick={runShots}
+              className="inline-flex items-center gap-2 rounded-md border border-border bg-background/80 px-3 py-2 text-sm hover:bg-muted/80 transition-colors"
+              title="Resample measurements (seed + 1)"
+            >
+              <Play className="h-4 w-4" />
+              Run
+            </button>
             <button
               type="button"
               onClick={copyShareLink}
@@ -518,7 +547,7 @@ export function QuantumPlayground() {
 
         <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            Statevector simulator. Limit: {MAX_QUBITS} qubits in this UI. Mid-circuit measurement is not implemented yet.
+            Statevector simulator. Limit: {MAX_QUBITS} qubits in this UI. Measurement sampling is drawn from the final distribution.
           </p>
           {status && <p className="text-xs text-muted-foreground">{status}</p>}
         </div>
@@ -532,46 +561,62 @@ export function QuantumPlayground() {
               Select a tool, then click cells. For two-qubit tools, click control then target (same column).
             </p>
 
-            <div className="mt-4 flex flex-wrap gap-2">
-              {(
-                [
-                  ['H', 'H'],
-                  ['X', 'X'],
-                  ['Y', 'Y'],
-                  ['Z', 'Z'],
-                  ['S', 'S'],
-                  ['T', 'T'],
-                  ['CNOT', 'CNOT'],
-                  ['CZ', 'CZ'],
-                  ['SWAP', 'SWAP'],
-                ] as const
-              ).map(([id, label]) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => selectTool(id)}
-                  className={`rounded-md border px-3 py-2 text-sm transition-colors ${
-                    tool === id
-                      ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
-                      : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
-                  }`}
-                >
-                  {label}
-                </button>
-              ))}
-              <button
-                type="button"
-                onClick={() => selectTool('ERASE')}
-                className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
-                  tool === 'ERASE'
-                    ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
-                    : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
-                }`}
-                title="Erase"
-              >
-                <Eraser className="h-4 w-4" />
-                Erase
-              </button>
+            <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]">
+              <div>
+                <div className="flex flex-wrap gap-2">
+                  {(
+                    [
+                      ['H', 'H'],
+                      ['X', 'X'],
+                      ['Y', 'Y'],
+                      ['Z', 'Z'],
+                      ['S', 'S'],
+                      ['T', 'T'],
+                      ['CNOT', 'CNOT'],
+                      ['CZ', 'CZ'],
+                      ['SWAP', 'SWAP'],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => selectTool(id)}
+                      className={`rounded-md border px-3 py-2 text-sm transition-colors ${
+                        tool === id
+                          ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
+                          : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => selectTool('ERASE')}
+                    className={`inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors ${
+                      tool === 'ERASE'
+                        ? 'border-primary bg-primary/10 text-foreground shadow-sm shadow-black/10'
+                        : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
+                    }`}
+                    title="Erase"
+                  >
+                    <Eraser className="h-4 w-4" />
+                    Erase
+                  </button>
+                </div>
+
+                {pending && (
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Pending {pending.tool}: selected q{pending.qubit}. Click a different qubit in this column to place the gate.
+                  </p>
+                )}
+              </div>
+
+              <OperatorMatrix
+                embedded
+                operator={tool as OperatorId}
+                helper={operatorHelper}
+              />
             </div>
 
             <div className="mt-6 overflow-x-auto">
@@ -645,17 +690,19 @@ export function QuantumPlayground() {
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-2xl border border-border glass ring-soft p-5">
-            <p className="text-sm font-medium">Results</p>
-            {sim.error ? (
-              <p className="mt-2 text-sm text-red-500">
-                {sim.error}
-              </p>
-            ) : (
-              <p className="mt-2 text-xs text-muted-foreground">
-                Showing the final state distribution and a seeded measurement histogram.
-              </p>
-            )}
+          <div className="flex items-baseline justify-between gap-4">
+            <div>
+              <p className="text-sm font-medium">Results</p>
+              {sim.error ? (
+                <p className="mt-1 text-sm text-red-500">
+                  {sim.error}
+                </p>
+              ) : (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Final state distribution + seeded measurement histogram.
+                </p>
+              )}
+            </div>
           </div>
 
           {bloch && (
@@ -723,9 +770,13 @@ export function QuantumPlayground() {
             </p>
 
             <div className="mt-4 space-y-2">
-              {histogram.length === 0 ? (
+              {shots <= 0 ? (
                 <p className="text-sm text-muted-foreground">
-                  Run a circuit to see counts.
+                  Set shots above 0, then press Run to sample measurements.
+                </p>
+              ) : histogram.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  No counts yet. Press Run to sample measurements.
                 </p>
               ) : (
                 histogram.map((row) => {
