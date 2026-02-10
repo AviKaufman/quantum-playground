@@ -718,22 +718,35 @@ export function QuantumPlayground() {
         </div>
 
         <div>
-          <div className="flex items-baseline justify-between gap-4">
-            <div>
-              <p className="text-sm font-medium">Results</p>
-              {sim.error ? (
-                <p className="mt-1 text-sm text-red-500">
-                  {sim.error}
-                </p>
-              ) : (
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Final state distribution + seeded measurement histogram.
-                </p>
-              )}
+          <div className="rounded-2xl border border-border glass ring-soft p-5">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between">
+              <div>
+                <p className="text-sm font-medium">Results</p>
+                {sim.error ? (
+                  <p className="mt-1 text-sm text-red-500">
+                    {sim.error}
+                  </p>
+                ) : (
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Final state distribution + seeded measurement histogram.
+                  </p>
+                )}
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+                <span className="rounded-full border border-border bg-background/60 px-3 py-1">
+                  {circuit.nQubits} qubits
+                </span>
+                <span className="rounded-full border border-border bg-background/60 px-3 py-1">
+                  {circuit.steps.length} steps
+                </span>
+                <span className="rounded-full border border-border bg-background/60 px-3 py-1">
+                  {clampInt(shots, 0, 200000)} shots
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div>
               {bloch ? (
                 <div>
@@ -823,9 +836,9 @@ export function QuantumPlayground() {
                   return (
                     <div key={row.bits} className="grid grid-cols-[72px_1fr_72px] items-center gap-3">
                       <span className="font-mono text-xs text-muted-foreground">{row.bits}</span>
-                      <div className="h-2 rounded-full bg-muted overflow-hidden">
+                      <div className="h-3 rounded-full border border-border/60 bg-background/25 overflow-hidden">
                         <div
-                          className="h-2 rounded-full bg-primary"
+                          className="h-3 rounded-full bg-gradient-to-r from-primary to-[hsl(var(--aurora-b)/0.95)]"
                           style={{ width: `${Math.min(1, frac) * 100}%` }}
                         />
                       </div>
