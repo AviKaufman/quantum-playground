@@ -833,13 +833,17 @@ export function QuantumPlayground() {
               ) : (
                 histogram.map((row) => {
                   const frac = shots > 0 ? row.count / shots : 0
+                  const pct = Math.min(1, Math.max(0, frac)) * 100
                   return (
                     <div key={row.bits} className="grid grid-cols-[72px_1fr_72px] items-center gap-3">
                       <span className="font-mono text-xs text-muted-foreground">{row.bits}</span>
                       <div className="h-3 rounded-full border border-border/60 bg-background/25 overflow-hidden">
                         <div
-                          className="h-3 rounded-full bg-gradient-to-r from-primary to-[hsl(var(--aurora-b)/0.95)]"
-                          style={{ width: `${Math.min(1, frac) * 100}%` }}
+                          className="h-3 rounded-full bg-[hsl(var(--aurora-b)/0.95)] shadow-[0_0_0_1px_hsl(var(--aurora-b)/0.35),0_0_18px_hsl(var(--aurora-b)/0.25)]"
+                          style={{
+                            width: `${pct}%`,
+                            minWidth: row.count > 0 ? 2 : 0,
+                          }}
                         />
                       </div>
                       <span className="text-right font-mono text-xs text-muted-foreground">
