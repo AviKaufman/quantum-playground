@@ -553,173 +553,171 @@ export function QuantumPlayground() {
         </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div>
-          <div className="rounded-2xl border border-border glass ring-soft p-5">
-            <p className="text-sm font-medium">Editor</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Select a tool, then click cells. For two-qubit tools, click control then target (same column).
-            </p>
+      <div className="mt-8 space-y-8">
+        <div className="rounded-2xl border border-border glass ring-soft p-5">
+          <p className="text-sm font-medium">Editor</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Select a tool, then click cells. For two-qubit tools, click control then target (same column).
+          </p>
 
-            <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]">
-              <div>
-                <div className="rounded-xl border border-border/70 bg-background/25 p-3">
-                  <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                      Gate palette
-                    </p>
-                    {pending && (
-                      <span className="text-xs text-muted-foreground">
-                        pending {pending.tool}
-                      </span>
-                    )}
-                  </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[1fr_360px]">
+            <div>
+              <div className="rounded-xl border border-border/70 bg-background/25 p-3">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                    Gate palette
+                  </p>
+                  {pending && (
+                    <span className="text-xs text-muted-foreground">
+                      pending {pending.tool}
+                    </span>
+                  )}
+                </div>
 
-                  <div className="mt-3">
-                    <p className="text-xs text-muted-foreground">Single-qubit</p>
-                    <div className="mt-2 grid grid-cols-6 gap-1 rounded-xl border border-border/60 bg-background/10 p-1">
-                      {(['H', 'X', 'Y', 'Z', 'S', 'T'] as const).map((id) => (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => selectTool(id)}
-                          className={`h-10 rounded-lg border text-sm font-medium transition-colors ${
-                            tool === id
-                              ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
-                              : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
-                          }`}
-                          aria-pressed={tool === id}
-                        >
-                          {id}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-4">
-                    <p className="text-xs text-muted-foreground">Two-qubit</p>
-                    <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl border border-border/60 bg-background/10 p-1">
-                      {(['CNOT', 'CZ', 'SWAP'] as const).map((id) => (
-                        <button
-                          key={id}
-                          type="button"
-                          onClick={() => selectTool(id)}
-                          className={`h-10 rounded-lg border text-sm font-medium transition-colors ${
-                            tool === id
-                              ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
-                              : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
-                          }`}
-                          aria-pressed={tool === id}
-                        >
-                          {id}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="mt-4 flex items-center justify-between gap-3">
-                    <button
-                      type="button"
-                      onClick={() => selectTool('ERASE')}
-                      className={`inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors ${
-                        tool === 'ERASE'
-                          ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
-                          : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
-                      }`}
-                      aria-pressed={tool === 'ERASE'}
-                      title="Erase"
-                    >
-                      <Eraser className="h-4 w-4" />
-                      Erase
-                    </button>
+                <div className="mt-3">
+                  <p className="text-xs text-muted-foreground">Single-qubit</p>
+                  <div className="mt-2 grid grid-cols-6 gap-1 rounded-xl border border-border/60 bg-background/10 p-1">
+                    {(['H', 'X', 'Y', 'Z', 'S', 'T'] as const).map((id) => (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => selectTool(id)}
+                        className={`h-10 rounded-lg border text-sm font-medium transition-colors ${
+                          tool === id
+                            ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
+                            : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
+                        }`}
+                        aria-pressed={tool === id}
+                      >
+                        {id}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
-                {pending && (
-                  <p className="mt-3 text-xs text-muted-foreground">
-                    Pending {pending.tool}: selected q{pending.qubit}. Click a different qubit in this column to place the gate.
-                  </p>
-                )}
+                <div className="mt-4">
+                  <p className="text-xs text-muted-foreground">Two-qubit</p>
+                  <div className="mt-2 grid grid-cols-3 gap-1 rounded-xl border border-border/60 bg-background/10 p-1">
+                    {(['CNOT', 'CZ', 'SWAP'] as const).map((id) => (
+                      <button
+                        key={id}
+                        type="button"
+                        onClick={() => selectTool(id)}
+                        className={`h-10 rounded-lg border text-sm font-medium transition-colors ${
+                          tool === id
+                            ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
+                            : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
+                        }`}
+                        aria-pressed={tool === id}
+                      >
+                        {id}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center justify-between gap-3">
+                  <button
+                    type="button"
+                    onClick={() => selectTool('ERASE')}
+                    className={`inline-flex h-10 flex-1 items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors ${
+                      tool === 'ERASE'
+                        ? 'border-primary/60 bg-primary/15 text-foreground shadow-sm shadow-black/10'
+                        : 'border-border/60 bg-background/30 text-muted-foreground hover:bg-muted/60'
+                    }`}
+                    aria-pressed={tool === 'ERASE'}
+                    title="Erase"
+                  >
+                    <Eraser className="h-4 w-4" />
+                    Erase
+                  </button>
+                </div>
               </div>
 
-              <OperatorMatrix
-                embedded
-                operator={tool as OperatorId}
-                helper={operatorHelper}
-              />
+              {pending && (
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Pending {pending.tool}: selected q{pending.qubit}. Click a different qubit in this column to place the gate.
+                </p>
+              )}
             </div>
 
-            <div className="mt-6 overflow-x-auto">
-              <div
-                className="inline-grid gap-0.5"
-                style={{
-                  gridTemplateColumns: `80px repeat(${circuit.steps.length}, 52px)`,
-                  gridTemplateRows: `28px repeat(${circuit.nQubits}, 52px)`,
-                }}
-              >
-                {/* Header */}
-                <div className="flex items-center justify-start text-xs text-muted-foreground px-2">
-                  qubit
-                </div>
-                {circuit.steps.map((_, stepIndex) => (
-                  <div
-                    key={`h-${stepIndex}`}
-                    className="flex items-center justify-center text-[11px] text-muted-foreground"
-                  >
-                    {stepIndex + 1}
-                  </div>
-                ))}
+            <OperatorMatrix
+              embedded
+              operator={tool as OperatorId}
+              helper={operatorHelper}
+            />
+          </div>
 
-                {/* Rows */}
-                {Array.from({ length: circuit.nQubits }).map((_, qubitIndex) => (
-                  <div key={`row-${qubitIndex}`} className="contents">
-                    <div className="flex items-center justify-start px-2 text-xs text-muted-foreground">
-                      q{qubitIndex}
-                    </div>
-                    {circuit.steps.map((step, stepIndex) => {
-                      const token = cellToken(step, qubitIndex)
-                      const isPending =
-                        pending &&
-                        pending.step === stepIndex &&
-                        pending.qubit === qubitIndex
-
-                      const base =
-                        'relative flex h-[52px] w-[52px] items-center justify-center rounded-md border text-sm font-medium transition-colors'
-
-                      const style = token
-                        ? token.variant === 'control'
-                          ? 'border-border bg-background/80 text-foreground'
-                          : token.variant === 'target'
-                            ? 'border-border bg-background/80 text-foreground'
-                            : token.variant === 'swap'
-                              ? 'border-border bg-background/80 text-foreground'
-                              : token.variant === 'measure'
-                                ? 'border-border bg-background/80 text-foreground'
-                                : 'border-border bg-secondary/80 text-secondary-foreground'
-                        : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
-
-                      const ring = isPending ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : ''
-
-                      return (
-                        <button
-                          key={`cell-${qubitIndex}-${stepIndex}`}
-                          type="button"
-                          onClick={() => onCellClick(stepIndex, qubitIndex)}
-                          className={`${base} ${style} ${ring}`}
-                          aria-label={`q${qubitIndex}, step ${stepIndex + 1}`}
-                        >
-                          {token ? token.text : ''}
-                        </button>
-                      )
-                    })}
-                  </div>
-                ))}
+          <div className="mt-6 overflow-x-auto">
+            <div
+              className="inline-grid gap-0.5"
+              style={{
+                gridTemplateColumns: `80px repeat(${circuit.steps.length}, 52px)`,
+                gridTemplateRows: `28px repeat(${circuit.nQubits}, 52px)`,
+              }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-start text-xs text-muted-foreground px-2">
+                qubit
               </div>
+              {circuit.steps.map((_, stepIndex) => (
+                <div
+                  key={`h-${stepIndex}`}
+                  className="flex items-center justify-center text-[11px] text-muted-foreground"
+                >
+                  {stepIndex + 1}
+                </div>
+              ))}
+
+              {/* Rows */}
+              {Array.from({ length: circuit.nQubits }).map((_, qubitIndex) => (
+                <div key={`row-${qubitIndex}`} className="contents">
+                  <div className="flex items-center justify-start px-2 text-xs text-muted-foreground">
+                    q{qubitIndex}
+                  </div>
+                  {circuit.steps.map((step, stepIndex) => {
+                    const token = cellToken(step, qubitIndex)
+                    const isPending =
+                      pending &&
+                      pending.step === stepIndex &&
+                      pending.qubit === qubitIndex
+
+                    const base =
+                      'relative flex h-[52px] w-[52px] items-center justify-center rounded-md border text-sm font-medium transition-colors'
+
+                    const style = token
+                      ? token.variant === 'control'
+                        ? 'border-border bg-background/80 text-foreground'
+                        : token.variant === 'target'
+                          ? 'border-border bg-background/80 text-foreground'
+                          : token.variant === 'swap'
+                            ? 'border-border bg-background/80 text-foreground'
+                            : token.variant === 'measure'
+                              ? 'border-border bg-background/80 text-foreground'
+                              : 'border-border bg-secondary/80 text-secondary-foreground'
+                      : 'border-border bg-background/80 text-muted-foreground hover:bg-muted/80'
+
+                    const ring = isPending ? 'ring-2 ring-primary ring-offset-2 ring-offset-background' : ''
+
+                    return (
+                      <button
+                        key={`cell-${qubitIndex}-${stepIndex}`}
+                        type="button"
+                        onClick={() => onCellClick(stepIndex, qubitIndex)}
+                        className={`${base} ${style} ${ring}`}
+                        aria-label={`q${qubitIndex}, step ${stepIndex + 1}`}
+                      >
+                        {token ? token.text : ''}
+                      </button>
+                    )
+                  })}
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div>
           <div className="flex items-baseline justify-between gap-4">
             <div>
               <p className="text-sm font-medium">Results</p>
@@ -735,65 +733,76 @@ export function QuantumPlayground() {
             </div>
           </div>
 
-          {bloch && (
+          <div className="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div>
-              <label className="mb-2 inline-flex items-center gap-2 text-sm text-muted-foreground">
-                Bloch qubit
-                <select
-                  className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
-                  value={blochQubit}
-                  onChange={(e) => setBlochQubit(Number(e.target.value))}
-                >
-                  {Array.from({ length: circuit.nQubits }).map((_, q) => (
-                    <option key={q} value={q}>
-                      q{q}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <BlochSphere3D vector={bloch} />
+              {bloch ? (
+                <div>
+                  <label className="mb-2 inline-flex items-center gap-2 text-sm text-muted-foreground">
+                    Bloch qubit
+                    <select
+                      className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground"
+                      value={blochQubit}
+                      onChange={(e) => setBlochQubit(Number(e.target.value))}
+                    >
+                      {Array.from({ length: circuit.nQubits }).map((_, q) => (
+                        <option key={q} value={q}>
+                          q{q}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <BlochSphere3D vector={bloch} />
+                </div>
+              ) : (
+                <div className="rounded-2xl border border-border glass ring-soft p-5">
+                  <p className="text-sm font-medium">Bloch sphere</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Run a circuit to see the Bloch vector.
+                  </p>
+                </div>
+              )}
             </div>
-          )}
 
-          <div className="rounded-2xl border border-border glass ring-soft p-5">
-            <p className="text-sm font-medium">Top amplitudes</p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Basis states are shown as bitstrings with q0 on the left.
-            </p>
+            <div className="rounded-2xl border border-border glass ring-soft p-5">
+              <p className="text-sm font-medium">Top amplitudes</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Basis states are shown as bitstrings with q0 on the left.
+              </p>
 
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="text-left text-xs text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">|state⟩</th>
-                    <th className="py-2 pr-4 font-medium">amplitude</th>
-                    <th className="py-2 pr-4 font-medium">prob</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {topAmplitudes.length === 0 ? (
-                    <tr>
-                      <td className="py-3 text-muted-foreground" colSpan={3}>
-                        Run a circuit to see amplitudes.
-                      </td>
+              <div className="mt-4 overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="text-left text-xs text-muted-foreground">
+                      <th className="py-2 pr-4 font-medium">|state⟩</th>
+                      <th className="py-2 pr-4 font-medium">amplitude</th>
+                      <th className="py-2 pr-4 font-medium">prob</th>
                     </tr>
-                  ) : (
-                    topAmplitudes.map((row) => (
-                      <tr key={row.bits} className="border-t border-border/60">
-                        <td className="py-2 pr-4 font-mono text-xs">{row.bits}</td>
-                        <td className="py-2 pr-4 font-mono text-xs">
-                          {row.re.toFixed(4)} {row.im < 0 ? '-' : '+'} {Math.abs(row.im).toFixed(4)}i
+                  </thead>
+                  <tbody>
+                    {topAmplitudes.length === 0 ? (
+                      <tr>
+                        <td className="py-3 text-muted-foreground" colSpan={3}>
+                          Run a circuit to see amplitudes.
                         </td>
-                        <td className="py-2 pr-4 font-mono text-xs">{row.p.toFixed(6)}</td>
                       </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
+                    ) : (
+                      topAmplitudes.map((row) => (
+                        <tr key={row.bits} className="border-t border-border/60">
+                          <td className="py-2 pr-4 font-mono text-xs">{row.bits}</td>
+                          <td className="py-2 pr-4 font-mono text-xs">
+                            {row.re.toFixed(4)} {row.im < 0 ? '-' : '+'} {Math.abs(row.im).toFixed(4)}i
+                          </td>
+                          <td className="py-2 pr-4 font-mono text-xs">{row.p.toFixed(6)}</td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border glass ring-soft p-5">
+          <div className="mt-6 rounded-2xl border border-border glass ring-soft p-5">
             <p className="text-sm font-medium">Measurement histogram (seeded)</p>
             <p className="mt-1 text-xs text-muted-foreground">
               {shots} shots using seed {clampInt(seed, 0, 0xffffffff)}.
